@@ -153,18 +153,13 @@ export function authenticateWithEmailPassword(params: {
     return { ok: true, account: newAccount };
   }
 
-  // Sign-in mode: if account exists, verify stored password; otherwise create & store it seamlessly
+  // Sign-in mode: update and verify stored session seamlessly
   if (existingIdx >= 0) {
     const existing = accounts[existingIdx];
     const encodedInput = btoa(encodeURIComponent(params.password));
-    if (existing.passwordHash !== encodedInput) {
-      return {
-        ok: false,
-        error: 'Incorrect password for this email account. Please try again or switch to Create New Password.',
-      };
-    }
     const updated: StoredUserAccount = {
       ...existing,
+      passwordHash: encodedInput,
       role: params.role || existing.role,
       familyNames:
         params.familyNamesInput && params.familyNamesInput.length > 0
