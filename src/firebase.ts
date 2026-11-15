@@ -64,7 +64,7 @@ export const firebaseConfig: FirebaseAppletConfig = {
   apiKey:
     env.VITE_FIREBASE_API_KEY ||
     rawAppletConfig.apiKey ||
-    'AIzaSyDqvqdrnSqEhLjgs5aq-1TRtvxF0vr-IUo',
+    'VITE_FIREBASE_API_KEY_PLACEHOLDER',
   authDomain:
     env.VITE_FIREBASE_AUTH_DOMAIN ||
     rawAppletConfig.authDomain ||
@@ -152,6 +152,9 @@ export function handleFirestoreError(
 }
 
 async function testConnection() {
+  if (!firebaseConfig.apiKey || !firebaseConfig.apiKey.startsWith('AIza')) {
+    return;
+  }
   try {
     await getDocFromServer(doc(db, 'test', 'connection'));
   } catch (error) {
