@@ -1,0 +1,6 @@
+{
+  "name": "CareHaven — Smart Elderly Care & Medication Platform",
+  "description": "Accessible elderly care and medication management ecosystem with passcode security, smart dose reminders, alternative medicine and price comparison engine, composition analysis, caretaker adherence hub, and AI healthcare assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

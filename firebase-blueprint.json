@@ -1,0 +1,160 @@
+{
+  "entities": {
+    "CareProfile": {
+      "title": "CareProfile",
+      "description": "Stores the authenticated user care profile, email address, role preference, and custom family member names in Firestore.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the profile owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email or Gmail address of the signed-in user.",
+          "minLength": 3,
+          "maxLength": 150
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display identifier for the care profile.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "role": {
+          "type": "string",
+          "description": "Selected access role within the care circle.",
+          "enum": ["elderly", "caretaker", "family"],
+          "minLength": 1,
+          "maxLength": 20
+        },
+        "familyNamesCsv": {
+          "type": "string",
+          "description": "Comma-separated list of authorized family member names.",
+          "minLength": 0,
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was last updated."
+        }
+      },
+      "required": [
+        "ownerId",
+        "email",
+        "displayName",
+        "role",
+        "familyNamesCsv",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "MedicationRecord": {
+      "title": "MedicationRecord",
+      "description": "Stores a scheduled medication item and dose status synced to Firestore for the user.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "medId": {
+          "type": "string",
+          "description": "Unique medication identifier.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "brandName": {
+          "type": "string",
+          "description": "Brand name of the medication.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "genericName": {
+          "type": "string",
+          "description": "Generic active chemical compound.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "dosage": {
+          "type": "string",
+          "description": "Strength dosage string (e.g. 20 mg).",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "whatItIsFor": {
+          "type": "string",
+          "description": "Plain-English purpose of the medication.",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "timeSlot": {
+          "type": "string",
+          "description": "Scheduled time of day.",
+          "enum": ["Morning", "Afternoon", "Evening"],
+          "minLength": 1,
+          "maxLength": 20
+        },
+        "scheduledTime": {
+          "type": "string",
+          "description": "Formatted clock time (e.g. 08:00 AM).",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "status": {
+          "type": "string",
+          "description": "Current daily adherence state.",
+          "enum": ["Taken", "Due Now", "Upcoming", "Snoozed", "Missed"],
+          "minLength": 1,
+          "maxLength": 20
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the record was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the record was last updated."
+        }
+      },
+      "required": [
+        "ownerId",
+        "medId",
+        "brandName",
+        "genericName",
+        "dosage",
+        "whatItIsFor",
+        "timeSlot",
+        "scheduledTime",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/careProfiles/{userId}": {
+      "schema": { "$ref": "#/entities/CareProfile" },
+      "description": "Root care profile document keyed by the user's Firebase Auth UID."
+    },
+    "/careProfiles/{userId}/medications/{medId}": {
+      "schema": { "$ref": "#/entities/MedicationRecord" },
+      "description": "Subcollection of scheduled medications belonging to the parent CareProfile."
+    }
+  }
+}
